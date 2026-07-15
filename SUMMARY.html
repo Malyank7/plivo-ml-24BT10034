@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<title>SUMMARY - 2000 Step LLM Speedrun</title>
+<style>
+body{font-family:Arial,sans-serif;margin:40px;background:#f4f6f9;color:#222}
+.container{max-width:1000px;margin:auto;background:#fff;padding:30px}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #bbb;padding:8px}th{background:#184a8b;color:white}
+h1,h2{color:#184a8b}
+</style></head><body><div class="container">
+<h1>2,000 Step LLM Speedrun - SUMMARY</h1>
+<p>This submission improves the baseline GPT model while remaining within the assignment constraints (CPU-only, ≤2000 steps, ≤2M parameters, training only on the supplied corpus).</p>
+
+<h2>Final Result</h2>
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Final BPB</td><td><b>2.4181</b></td></tr>
+<tr><td>Training Steps</td><td>2000</td></tr>
+<tr><td>Tokenizer</td><td>Byte-level UTF-8</td></tr>
+</table>
+
+<h2>Architecture</h2>
+<table>
+<tr><th>Setting</th><th>Final Value</th></tr>
+<tr><td>Layers</td><td>4</td></tr>
+<tr><td>Heads</td><td>4</td></tr>
+<tr><td>Embedding Size</td><td>160</td></tr>
+<tr><td>Context Length</td><td>192</td></tr>
+<tr><td>Dropout</td><td>0.1</td></tr>
+<tr><td>Weight Tying</td><td>Enabled</td></tr>
+<tr><td>Initialization Std</td><td>0.02</td></tr>
+</table>
+
+<h2>Implemented Improvements</h2>
+<ul>
+<li>Adam → AdamW optimizer</li>
+<li>Weight decay = 0.01</li>
+<li>Cosine Annealing learning-rate scheduler</li>
+<li>Gradient clipping (1.0)</li>
+<li>Batch size: 8 → 16</li>
+<li>Learning rate: 3e-4 → 1e-3</li>
+<li>Block size: 128 → 192</li>
+<li>Dropout: 0.0 → 0.1</li>
+<li>Weight tying enabled</li>
+<li>Initialization standard deviation: 0.05 → 0.02</li>
+</ul>
+
+<h2>Experiment Workflow</h2>
+<ol>
+<li>Established a baseline.</li>
+<li>Improved optimizer.</li>
+<li>Added scheduler.</li>
+<li>Added gradient clipping.</li>
+<li>Enabled weight tying.</li>
+<li>Adjusted initialization and dropout.</li>
+<li>Expanded context length.</li>
+<li>Tuned learning rate and batch size.</li>
+<li>Selected the configuration with the best observed BPB.</li>
+</ol>
+
+<h2>Human & AI Contribution</h2>
+<table>
+<tr><th>Activity</th><th>Primary Contributor</th></tr>
+<tr><td>Understanding the assignment and selecting experiments</td><td>Human</td></tr>
+<tr><td>Running experiments and evaluating BPB</td><td>Human</td></tr>
+<tr><td>Implementation guidance and debugging</td><td>Human with AI assistance</td></tr>
+<tr><td>Documentation formatting</td><td>AI assistance</td></tr>
+</table>
+
+<h2>Conclusion</h2>
+<p>The final configuration focused on optimization, stability and parameter efficiency instead of changing the overall transformer architecture. The submitted model remained within all competition limits and achieved a final BPB of <b>2.4181</b>.</p>
+
+</div></body></html>
