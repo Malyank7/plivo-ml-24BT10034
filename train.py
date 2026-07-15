@@ -33,8 +33,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", required=True)
     ap.add_argument("--steps", type=int, default=2000)
-    ap.add_argument("--batch", type=int, default=8)
-    ap.add_argument("--lr", type=float, default=3e-4)
+    ap.add_argument("--batch", type=int, default=16)
+    ap.add_argument("--lr", type=float, default=5e-4)
     ap.add_argument("--seed", type=int, default=1337)
     ap.add_argument("--out", default="ckpt.pt")
     ap.add_argument("--log_every", type=int, default=100)
@@ -57,9 +57,9 @@ def main():
     assert n <= MAX_PARAMS, f"cap: max {MAX_PARAMS:,} params"
 
     # baseline choices, all questionable on purpose:
-    opt = torch.optim.Adam(model.parameters(), lr=args.lr)  # constant LR,
+    opt = torch.optim.AdamW(model.parameters(), lr=args.lr,weight_decay=0.01)  # constant LR,
     # no warmup, no schedule, no weight decay, no gradient clipping.
-
+    scheduler= torch.optim.lr_scheduler.CosineAnnealingLR(opt,T_max=args.steps)
     model.train()
     t0 = time.time()
     losses = []
@@ -68,7 +68,12 @@ def main():
         _, loss = model(x, y)
         opt.zero_grad(set_to_none=True)
         loss.backward()
+        torch.nn.utils.clip_grad_norm_(
+            model.parameters(),
+            1.0
+        )
         opt.step()
+        scheduler.step()
         losses.append(loss.item())
         if step % args.log_every == 0 or step == 1:
             avg = sum(losses[-args.log_every:]) / len(losses[-args.log_every:])
